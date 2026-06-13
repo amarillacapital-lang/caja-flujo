@@ -1283,34 +1283,57 @@ JAVASCRIPT — Lógica completa de la aplicación
   function getBrowserSteps() {
     const ua = navigator.userAgent;
     const isInAppBrowser = /FBAN|FBAV|Instagram|WhatsApp|Messenger|Telegram|Twitter|micromessenger/i.test(ua);
-    const isChrome = ua.includes('Chrome') && !ua.includes('Edg');
+    const isWebView = /wv|WebView|; wv\)/i.test(ua) || (!ua.includes('Chrome') && /Android/i.test(ua) && /AppleWebKit/i.test(ua));
+    const isChrome = ua.includes('Chrome') && !ua.includes('Edg') && !isWebView;
     const isBrave = ua.includes('Brave');
+    const isSamsung = ua.includes('Samsung') || ua.includes('SM-') || /SamsungBrowser/i.test(ua);
+    const isFirefox = ua.includes('Firefox');
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(ua);
-    const isSafari = /^((?!chrome|android).)*safari/i.test(ua) || (ua.includes('Safari') && !ua.includes('Chrome'));
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua) || (ua.includes('Safari') && !ua.includes('Chrome') && !isWebView);
 
     if (isInAppBrowser) {
       return {
         title: '📵 Estás en un navegador interno',
         steps: [
-          '📍 Tocá el icono <b>⋮</b> o <b>⚙️</b> y elegí <b>Abrir en Chrome</b>',
+          '📍 Tocá <b>⋮</b> o <b>⚙️</b> y elegí <b>Abrir en Chrome</b>',
           '📍 Si no aparece, copiá el enlace y abrílo en Chrome:',
         ],
         showCopyLink: true
       };
     }
+    if (isWebView) {
+      return {
+        title: '📵 Estás en un WebView (navegador recortado)',
+        steps: [
+          '📍 Copiá el enlace de abajo',
+          '📍 Abrí <b>Chrome</b> o <b>Brave</b> y pegalo ahí',
+          '✅ En Chrome tocá <b>⋮ → Agregar a pantalla de inicio</b>'
+        ],
+        showCopyLink: true
+      };
+    }
+    if (isSamsung) {
+      return {
+        steps: [
+          '📍 Tocá el icono <b>⋮</b> (menú, abajo a la derecha)',
+          '📌 Tocá <b>Agregar página a</b> → <b>Pantalla de inicio</b>',
+          '✅ Tocá <b>Agregar</b>'
+        ]
+      };
+    }
     if (isSafari || /iPhone|iPad|iPod/i.test(ua)) {
       return {
         steps: [
-          '📍 Tocá el botón <b>Compartir</b> <i class="fas fa-share-from-square mx-1"></i> (abajo)',
-          '📌 Desplazate hacia abajo y tocá <b>Agregar a pantalla de inicio</b>',
+          '📍 Tocá <b>Compartir</b> <i class="fas fa-share-from-square mx-1"></i> (abajo)',
+          '📌 Desplazate abajo y tocá <b>Agregar a pantalla de inicio</b>',
           '✅ Tocá <b>Agregar</b> (arriba a la derecha)'
         ]
       };
     }
-    if (isMobile) {
+    if (isMobile && (isChrome || isBrave)) {
       return {
         steps: [
-          '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
+          '📍 Tocá <b>⋮</b> (menú, arriba a la derecha)',
           '📌 Tocá <b>Agregar a pantalla de inicio</b>',
           '✅ Tocá <b>Agregar</b>'
         ]
@@ -1319,15 +1342,14 @@ JAVASCRIPT — Lógica completa de la aplicación
     if (isChrome || isBrave) {
       return {
         steps: [
-          '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
-          '📌 Andá a <b>Más herramientas → Crear acceso directo…</b>',
+          '📍 Tocá <b>⋮</b> → <b>Más herramientas</b> → <b>Crear acceso directo…</b>',
           '✅ Marcá <b>Abrir como ventana</b> y tocá <b>Crear</b>'
         ]
       };
     }
     return {
       steps: [
-        '📍 Buscá la opción <b>Instalar</b> o <b>Agregar a pantalla de inicio</b> en el menú del navegador',
+        '📍 Buscá <b>Instalar</b> o <b>Agregar a pantalla de inicio</b> en el menú del navegador',
         '✅ Seguí los pasos que te indique'
       ]
     };
@@ -1362,7 +1384,12 @@ JAVASCRIPT — Lógica completa de la aplicación
       `UA: ${navigator.userAgent}`
     ];
     html += `<div class="mt-4 pt-3 border-t border-[#C5A059]/10 text-[10px] text-[#6B7280] space-y-0.5 font-mono break-all">${diag.map(d => `<div>${d}</div>`).join('')}</div>`;
-    html += `<button onclick="(async()=>{if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg){await reg.unregister();} localStorage.clear();caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>{mostrarToast('🧹 Caché limpiado, recargando...','info');setTimeout(()=>location.reload(),1000);});}})()" class="mt-3 w-full text-xs text-center text-[#C5A059]/60 hover:text-[#C5A059] transition-colors py-2">🧹 Limpiar caché y recargar</button>`;
+    html += `<div class="flex flex-wrap gap-2 mt-3">`;
+    if (navigator.share) {
+      html += `<button onclick="navigator.share({title:'Flujo de Caja',url:window.location.href}).catch(()=>{})" class="flex-1 px-3 py-2 rounded-xl bg-[#C5A059]/10 border border-[#C5A059]/20 text-[#C5A059] text-xs font-semibold hover:bg-[#C5A059]/20 transition-colors"><i class="fas fa-share-nodes mr-1"></i>Compartir</button>`;
+    }
+    html += `<button onclick="(async()=>{if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg){await reg.unregister();}localStorage.clear();caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>{mostrarToast('🧹 Listo, recargando...','info');setTimeout(()=>location.reload(),1000);});}})()" class="flex-1 px-3 py-2 rounded-xl bg-[#DC2626]/10 border border-[#DC2626]/20 text-[#DC2626] text-xs font-semibold hover:bg-[#DC2626]/20 transition-colors"><i class="fas fa-broom mr-1"></i>Limpiar y recargar</button>`;
+    html += `</div>`;
     installSteps.innerHTML = html;
     installModal.classList.remove('hidden');
   }
