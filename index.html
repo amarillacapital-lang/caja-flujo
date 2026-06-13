@@ -480,6 +480,13 @@
     .text-balance {
       text-wrap: balance;
     }
+    @keyframes bounce-subtle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-bounce-subtle {
+      animation: bounce-subtle 2s ease-in-out infinite;
+    }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -710,6 +717,14 @@ class="space-y-2 max-h-[420px] overflow-y-auto pr-1 no-scrollbar"
     <span id="footer-total" class="text-[#9CA3AF]">0 movimientos hoy</span>
   </p>
 </footer>
+
+<!-- ===== INSTALL BUTTON (oculto por defecto) ===== -->
+<div id="install-container" class="hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-40">
+  <button id="btn-install" class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#C5A059] text-[#0B0C10] font-semibold text-sm shadow-2xl shadow-[#C5A059]/30 hover:bg-[#D4B06A] transition-all duration-300 animate-bounce-subtle">
+    <i class="fas fa-download"></i>
+    Instalar App
+  </button>
+</div>
 
 </main>
 
@@ -1316,6 +1331,34 @@ JAVASCRIPT — Lógica completa de la aplicación
       });
     });
   }
+
+  // PWA — beforeinstallprompt
+  let deferredPrompt = null;
+  const installContainer = document.getElementById('install-container');
+  const installBtn = document.getElementById('btn-install');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installContainer.classList.remove('hidden');
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === 'accepted') {
+        installContainer.classList.add('hidden');
+      }
+      deferredPrompt = null;
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    installContainer.classList.add('hidden');
+    deferredPrompt = null;
+  });
 </script>
 
 <!-- Banner informativo si se abre desde archivo local (file://) -->
