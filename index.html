@@ -1272,49 +1272,79 @@ JAVASCRIPT — Lógica completa de la aplicación
 
   function getBrowserSteps() {
     const ua = navigator.userAgent;
+    const isInAppBrowser = /FBAN|FBAV|Instagram|WhatsApp|Messenger|Telegram|Twitter|micromessenger/i.test(ua);
     const isChrome = ua.includes('Chrome') && !ua.includes('Edg');
     const isBrave = ua.includes('Brave');
-    const isSamsung = ua.includes('Samsung') || ua.includes('SM-');
-    const isFirefox = ua.includes('Firefox');
-    const isSafari = /^((?!chrome|android).)*safari/i.test(ua) || (ua.includes('Safari') && !ua.includes('Chrome'));
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(ua);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua) || (ua.includes('Safari') && !ua.includes('Chrome'));
 
+    if (isInAppBrowser) {
+      return {
+        title: '📵 Estás en un navegador interno',
+        steps: [
+          '📍 Tocá el icono <b>⋮</b> o <b>⚙️</b> y elegí <b>Abrir en Chrome</b>',
+          '📍 Si no aparece, copiá el enlace y abrílo en Chrome:',
+        ],
+        showCopyLink: true
+      };
+    }
     if (isSafari || /iPhone|iPad|iPod/i.test(ua)) {
-      return [
-        '📍 Tocá el botón <b>Compartir</b> <i class="fas fa-share-from-square mx-1"></i> (abajo)',
-        '📌 Desplazate hacia abajo y tocá <b>Agregar a pantalla de inicio</b>',
-        '✅ Tocá <b>Agregar</b> (arriba a la derecha)'
-      ];
+      return {
+        steps: [
+          '📍 Tocá el botón <b>Compartir</b> <i class="fas fa-share-from-square mx-1"></i> (abajo)',
+          '📌 Desplazate hacia abajo y tocá <b>Agregar a pantalla de inicio</b>',
+          '✅ Tocá <b>Agregar</b> (arriba a la derecha)'
+        ]
+      };
     }
     if (isMobile) {
-      return [
-        '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
-        '📌 Tocá <b>Agregar a pantalla de inicio</b>',
-        '✅ Tocá <b>Agregar</b>'
-      ];
+      return {
+        steps: [
+          '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
+          '📌 Tocá <b>Agregar a pantalla de inicio</b>',
+          '✅ Tocá <b>Agregar</b>'
+        ]
+      };
     }
-    // Desktop
     if (isChrome || isBrave) {
-      return [
-        '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
-        '📌 Andá a <b>Más herramientas → Crear acceso directo…</b>',
-        '✅ Marcá <b>Abrir como ventana</b> y tocá <b>Crear</b>'
-      ];
+      return {
+        steps: [
+          '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
+          '📌 Andá a <b>Más herramientas → Crear acceso directo…</b>',
+          '✅ Marcá <b>Abrir como ventana</b> y tocá <b>Crear</b>'
+        ]
+      };
     }
-    return [
-      '📍 Buscá la opción <b>Instalar</b> o <b>Agregar a pantalla de inicio</b> en el menú del navegador',
-      '✅ Seguí los pasos que te indique'
-    ];
+    return {
+      steps: [
+        '📍 Buscá la opción <b>Instalar</b> o <b>Agregar a pantalla de inicio</b> en el menú del navegador',
+        '✅ Seguí los pasos que te indique'
+      ]
+    };
   }
 
   function showInstallModal() {
-    const steps = getBrowserSteps();
-    installSteps.innerHTML = steps.map((s, i) =>
+    const data = getBrowserSteps();
+    let html = '';
+    if (data.title) {
+      html += `<div class="text-sm font-semibold text-[#C5A059] mb-2">${data.title}</div>`;
+    }
+    html += data.steps.map((s, i) =>
       `<div class="flex items-start gap-3 p-3 rounded-xl bg-[#0B0C10]/60">
         <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#C5A059] text-[#0B0C10] text-xs font-bold flex items-center justify-center">${i + 1}</span>
         <span class="pt-0.5 leading-relaxed">${s}</span>
       </div>`
     ).join('');
+    if (data.showCopyLink) {
+      html += `
+        <div class="flex gap-2 mt-2">
+          <input id="install-url" type="text" value="${window.location.href}" readonly class="flex-1 bg-[#0B0C10] rounded-xl px-3 py-2 text-xs text-[#9CA3AF] border border-[#C5A059]/10 select-all" onclick="this.select()">
+          <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{mostrarToast('✅ Enlace copiado','success')})" class="px-3 py-2 rounded-xl bg-[#C5A059] text-[#0B0C10] font-semibold text-xs hover:bg-[#D4B06A] transition-colors">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>`;
+    }
+    installSteps.innerHTML = html;
     installModal.classList.remove('hidden');
   }
 
