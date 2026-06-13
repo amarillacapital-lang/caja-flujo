@@ -1257,18 +1257,28 @@ JAVASCRIPT — Lógica completa de la aplicación
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').then((reg) => {
         console.log('✅ Service Worker registrado:', reg.scope);
+        swRegistered = true;
       }).catch((err) => {
         console.warn('⚠️ Service Worker no se pudo registrar:', err);
+        swRegistered = false;
       });
     });
   }
 
   // PWA — botón de instalar siempre visible + modal con pasos
   let deferredPrompt = null;
+  let swRegistered = false;
   const installBtn = document.getElementById('btn-install');
   const installModal = document.getElementById('install-modal');
   const installSteps = document.getElementById('install-steps');
   const modalClose = document.getElementById('modal-close');
+
+  // Verificar estado del SW
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then((reg) => {
+      swRegistered = !!reg;
+    });
+  }
 
   function getBrowserSteps() {
     const ua = navigator.userAgent;
@@ -1344,6 +1354,14 @@ JAVASCRIPT — Lógica completa de la aplicación
           </button>
         </div>`;
     }
+    // Diagnóstico PWA
+    const diag = [
+      `Protocolo: ${window.location.protocol}`,
+      `SW registrado: ${swRegistered}`,
+      `beforeinstallprompt: ${deferredPrompt ? 'disponible' : 'no disponible'}`,
+      `Navegador: ${navigator.userAgent.substring(0, 80)}`
+    ];
+    html += `<div class="mt-4 pt-3 border-t border-[#C5A059]/10 text-[10px] text-[#6B7280] space-y-0.5 font-mono">${diag.map(d => `<div>${d}</div>`).join('')}</div>`;
     installSteps.innerHTML = html;
     installModal.classList.remove('hidden');
   }
