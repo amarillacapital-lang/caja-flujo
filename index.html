@@ -692,15 +692,15 @@ class="space-y-2 max-h-[420px] overflow-y-auto pr-1 no-scrollbar"
   </p>
 </footer>
 
+</main>
+
 <!-- ===== INSTALL BUTTON (siempre visible en la esquina) ===== -->
-<div class="fixed bottom-6 right-4 z-40">
-  <button id="btn-install" class="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#C5A059] text-[#0B0C10] font-semibold text-sm shadow-2xl shadow-[#C5A059]/30 hover:bg-[#D4B06A] transition-all duration-300" title="Instalar app en tu dispositivo">
-    <i class="fas fa-download"></i>
-    <span class="hidden sm:inline">Instalar App</span>
+<div class="fixed bottom-6 right-4 z-50">
+  <button id="btn-install" class="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#C5A059] text-[#0B0C10] font-semibold text-sm shadow-2xl shadow-[#C5A059]/30 hover:bg-[#D4B06A] active:scale-95 transition-all duration-300" title="Instalar app en tu dispositivo">
+    <i class="fas fa-download text-sm"></i>
+    <span>Instalar</span>
   </button>
 </div>
-
-</main>
 
 <!-- ================================================================
 JAVASCRIPT — Lógica completa de la aplicación
@@ -1233,7 +1233,7 @@ JAVASCRIPT — Lógica completa de la aplicación
   // ===================================================================
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').then((reg) => {
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
         console.log('✅ Service Worker registrado:', reg.scope);
       }).catch((err) => {
         console.warn('⚠️ Service Worker no se pudo registrar:', err);
