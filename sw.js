@@ -7,12 +7,13 @@ const CACHE_NAME = 'caja-premium-v2';
 
 // Recursos a cachear al instalar
 const PRECACHE_URLS = [
-  'index.html',
-  'manifest.json',
-  'icons/icon-192.svg',
-  'icons/icon-512.svg',
-  'icons/icon-192.png',
-  'icons/icon-512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-192.svg',
+  './icons/icon-512.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 // CDN resources que queremos cachear
@@ -73,7 +74,7 @@ self.addEventListener('fetch', (event) => {
           return response;
         }).catch(() => {
           // Si falla, devolver el HTML principal como fallback
-          return caches.match('index.html');
+          return caches.match('./index.html');
         });
       })
     );
@@ -94,7 +95,7 @@ self.addEventListener('fetch', (event) => {
           if (cached) return cached;
           // Si no hay nada en caché, devolver index.html
           if (event.request.destination === 'document') {
-            return caches.match('index.html');
+            return caches.match('./index.html');
           }
           return new Response('', { status: 408 });
         });
