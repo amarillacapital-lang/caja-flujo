@@ -338,6 +338,13 @@
     .historial-item-new {
       animation: slideInItem 0.4s ease-out;
     }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-up {
+      animation: slideUp 0.3s ease-out;
+    }
 
     /* ===================================================================
        ESTILOS DE INPUT (Estilo Stripe/Élite)
@@ -700,6 +707,21 @@ class="space-y-2 max-h-[420px] overflow-y-auto pr-1 no-scrollbar"
     <i class="fas fa-download text-sm"></i>
     <span>Instalar</span>
   </button>
+</div>
+
+<!-- ===== INSTALL INSTRUCTIONS MODAL ===== -->
+<div id="install-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="w-full sm:max-w-sm bg-[#1F2833] rounded-t-3xl sm:rounded-3xl p-6 pb-8 border border-[#C5A059]/10 shadow-2xl animate-slide-up">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="text-lg font-bold text-[#F3F4F6]">Instalar App</h3>
+      <button id="modal-close" class="text-[#9CA3AF] hover:text-[#F3F4F6] transition-colors">
+        <i class="fas fa-xmark text-xl"></i>
+      </button>
+    </div>
+    <div id="install-steps" class="space-y-4 text-sm text-[#D1D5DB]">
+      <!-- injected by JS -->
+    </div>
+  </div>
 </div>
 
 <!-- ================================================================
@@ -1241,9 +1263,64 @@ JAVASCRIPT — Lógica completa de la aplicación
     });
   }
 
-  // PWA — botón de instalar siempre visible
+  // PWA — botón de instalar siempre visible + modal con pasos
   let deferredPrompt = null;
   const installBtn = document.getElementById('btn-install');
+  const installModal = document.getElementById('install-modal');
+  const installSteps = document.getElementById('install-steps');
+  const modalClose = document.getElementById('modal-close');
+
+  function getBrowserSteps() {
+    const ua = navigator.userAgent;
+    const isChrome = ua.includes('Chrome') && !ua.includes('Edg');
+    const isBrave = ua.includes('Brave');
+    const isSamsung = ua.includes('Samsung') || ua.includes('SM-');
+    const isFirefox = ua.includes('Firefox');
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua) || (ua.includes('Safari') && !ua.includes('Chrome'));
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(ua);
+
+    if (isSafari || /iPhone|iPad|iPod/i.test(ua)) {
+      return [
+        '📍 Tocá el botón <b>Compartir</b> <i class="fas fa-share-from-square mx-1"></i> (abajo)',
+        '📌 Desplazate hacia abajo y tocá <b>Agregar a pantalla de inicio</b>',
+        '✅ Tocá <b>Agregar</b> (arriba a la derecha)'
+      ];
+    }
+    if (isMobile) {
+      return [
+        '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
+        '📌 Tocá <b>Agregar a pantalla de inicio</b>',
+        '✅ Tocá <b>Agregar</b>'
+      ];
+    }
+    // Desktop
+    if (isChrome || isBrave) {
+      return [
+        '📍 Tocá el icono <b>⋮</b> (menú, arriba a la derecha)',
+        '📌 Andá a <b>Más herramientas → Crear acceso directo…</b>',
+        '✅ Marcá <b>Abrir como ventana</b> y tocá <b>Crear</b>'
+      ];
+    }
+    return [
+      '📍 Buscá la opción <b>Instalar</b> o <b>Agregar a pantalla de inicio</b> en el menú del navegador',
+      '✅ Seguí los pasos que te indique'
+    ];
+  }
+
+  function showInstallModal() {
+    const steps = getBrowserSteps();
+    installSteps.innerHTML = steps.map((s, i) =>
+      `<div class="flex items-start gap-3 p-3 rounded-xl bg-[#0B0C10]/60">
+        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#C5A059] text-[#0B0C10] text-xs font-bold flex items-center justify-center">${i + 1}</span>
+        <span class="pt-0.5 leading-relaxed">${s}</span>
+      </div>`
+    ).join('');
+    installModal.classList.remove('hidden');
+  }
+
+  function hideInstallModal() {
+    installModal.classList.add('hidden');
+  }
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -1260,10 +1337,18 @@ JAVASCRIPT — Lógica completa de la aplicación
           mostrarToast('✅ App instalada correctamente', 'success');
         }
       } else {
-        mostrarToast('📱 Abrí el menú ⋮ y tocá "Agregar a pantalla de inicio"', 'info');
+        showInstallModal();
       }
     });
   }
+
+  if (modalClose) {
+    modalClose.addEventListener('click', hideInstallModal);
+  }
+
+  installModal.addEventListener('click', (e) => {
+    if (e.target === installModal) hideInstallModal();
+  });
 
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
