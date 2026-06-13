@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0B0C10" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Flujo de Caja" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg" />
+  <title>Flujo de Caja · Comida Paraguaya Premium</title>
+
+  <!-- ===== TAILWIND CSS v3 CDN ===== -->
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+
+  <!-- ===== FONT AWESOME 6 ===== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- ===== GOOGLE FONTS: INTER ===== -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===================================================================
+       TAILWIND CONFIG — paleta de colores personalizada
+       =================================================================== */
+    .tailwind-config {
+      --color-dark: #0B0C10;
+      --color-surface: #1F2833;
+      --color-surface-light: #2C3E50;
+      --color-gold: #C5A059;
+      --color-gold-light: #D4B06A;
+      --color-green: #10B981;
+      --color-red: #DC2626;
+      --color-text: #F3F4F6;
+      --color-text-muted: #9CA3AF;
+      --color-border: rgba(197, 160, 89, 0.15);
+    }
+
+    /* ===================================================================
+       RESET Y BASE
+       =================================================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #0B0C10;
+      color: #F3F4F6;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(197, 160, 89, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(16, 185, 129, 0.02) 0%, transparent 50%);
+    }
+
+    /* ===================================================================
+       SCROLLBAR PERSONALIZADO (Premium)
+       =================================================================== */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2C3E50;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C5A059;
+    }
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #2C3E50 transparent;
+    }
+
+    /* ===================================================================
+       ANIMACIONES DE ENTRADA
+       =================================================================== */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    @keyframes scaleIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    .anim-fade-in {
+      animation: fadeIn 0.6s ease-out both;
+    }
+    .anim-fade-up {
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    .anim-scale-in {
+      animation: scaleIn 0.5s ease-out both;
+    }
+
+    /* ===================================================================
+       ANIMACIONES GASTRONÓMICAS 🍳
+       =================================================================== */
+
+    /* ---------- Sopa Paraguaya: Vapor humeante continuo ---------- */
+    @keyframes sopaGoldenPulse {
+      0%,
+      100% {
+        box-shadow: 0 0 6px rgba(197, 160, 89, 0.15);
+      }
+      50% {
+        box-shadow: 0 0 18px rgba(197, 160, 89, 0.35);
+      }
+    }
+    @keyframes steamRise1 {
+      0% {
+        transform: translateY(0) scale(0.4);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.7;
+      }
+      85% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateY(-22px) scale(1.1);
+        opacity: 0;
+      }
+    }
+    @keyframes steamRise2 {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.5;
+      }
+      85% {
+        opacity: 0.15;
+      }
+      100% {
+        transform: translateY(-18px) scale(0.9);
+        opacity: 0;
+      }
+    }
+    @keyframes steamRise3 {
+      0% {
+        transform: translateY(0) scale(0.3);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.4;
+      }
+      85% {
+        opacity: 0.1;
+      }
+      100% {
+        transform: translateY(-25px) scale(1.3);
+        opacity: 0;
+      }
+    }
+    .btn-sopa {
+      position: relative;
+      animation: sopaGoldenPulse 3s ease-in-out infinite;
+    }
+    .btn-sopa .steam-wisp {
+      position: absolute;
+      font-size: 0.6rem;
+      opacity: 0;
+      pointer-events: none;
+      top: -6px;
+    }
+    .btn-sopa .steam-wisp:nth-child(1) {
+      right: 4px;
+      animation: steamRise1 2.8s ease-out infinite;
+    }
+    .btn-sopa .steam-wisp:nth-child(2) {
+      right: 16px;
+      animation: steamRise2 3.2s ease-out infinite 0.9s;
+    }
+    .btn-sopa .steam-wisp:nth-child(3) {
+      right: 10px;
+      animation: steamRise3 2.5s ease-out infinite 1.8s;
+    }
+
+    /* ---------- Mbeju: Pulso de cocción (hover) ---------- */
+    @keyframes mbejuSizzle {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.06);
+      }
+    }
+    .btn-mbeju:hover {
+      animation: mbejuSizzle 0.5s ease-in-out 2;
+    }
+
+    /* ---------- Chipa: Bote elástico (hover) ---------- */
+    @keyframes chipaBounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      35% {
+        transform: translateY(-8px) scale(1.02);
+      }
+      55% {
+        transform: translateY(-3px);
+      }
+      70% {
+        transform: translateY(-1px);
+      }
+    }
+    .btn-chipa:hover {
+      animation: chipaBounce 0.6s ease;
+    }
+
+    /* ---------- Pajagua Mascada: Barrido dorado (hover) ---------- */
+    .btn-pajagua {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-pajagua .shimmer {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.25), transparent);
+      pointer-events: none;
+      transition: none;
+    }
+    .btn-pajagua:hover .shimmer {
+      animation: shimmerSweep 0.7s ease-in-out forwards;
+    }
+    @keyframes shimmerSweep {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 200%;
+      }
+    }
+
+    /* ---------- Pastel Mandi'o: Brillo crocante (hover) ---------- */
+    @keyframes crispGlow {
+      0% {
+        box-shadow: 0 0 5px rgba(197, 160, 89, 0.2);
+      }
+      100% {
+        box-shadow: 0 0 22px rgba(197, 160, 89, 0.55), 0 0 8px rgba(197, 160, 89, 0.2);
+      }
+    }
+    .btn-pastel:hover {
+      animation: crispGlow 0.7s ease-in-out infinite alternate;
+    }
+
+    /* ---------- Chicharõ Trenzado: Chisporroteo (hover) ---------- */
+    @keyframes chicharoShake {
+      0%,
+      100% {
+        transform: translateX(0) rotate(0);
+      }
+      20% {
+        transform: translateX(-2px) rotate(-1.5deg);
+      }
+      40% {
+        transform: translateX(2px) rotate(1.5deg);
+      }
+      60% {
+        transform: translateX(-1px) rotate(-0.5deg);
+      }
+      80% {
+        transform: translateX(1px) rotate(0.5deg);
+      }
+    }
+    .btn-chicharo:hover {
+      animation: chicharoShake 0.4s ease-in-out;
+    }
+
+    /* ---------- Animación de KPI: conteo ---------- */
+    @keyframes countPop {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.08);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    .kpi-pop {
+      animation: countPop 0.35s ease-out;
+    }
+
+    /* ---------- Animación nuevo movimiento en historial ---------- */
+    @keyframes slideInItem {
+      0% {
+        opacity: 0;
+        transform: translateX(-16px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+    .historial-item-new {
+      animation: slideInItem 0.4s ease-out;
+    }
+
+    /* ===================================================================
+       ESTILOS DE INPUT (Estilo Stripe/Élite)
+       =================================================================== */
+    .input-premium {
+      background-color: #1F2833;
+      border: 1.5px solid rgba(197, 160, 89, 0.15);
+      color: #F3F4F6;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 100%;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline: none;
+    }
+    .input-premium::placeholder {
+      color: #6B7280;
+    }
+    .input-premium:focus {
+      border-color: #C5A059;
+      box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
+    }
+    .input-premium:hover:not(:focus) {
+      border-color: rgba(197, 160, 89, 0.3);
+    }
+    /* Quitar spinners del input number */
+    .input-premium[type="number"]::-webkit-inner-spin-button,
+    .input-premium[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .input-premium[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* ===================================================================
+       SELECTOR PREMIUM
+       =================================================================== */
+    .select-premium {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C5A059' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    .select-premium option {
+      background-color: #1F2833;
+      color: #F3F4F6;
+    }
+
+    /* ===================================================================
+       TOAST NOTIFICATION
+       =================================================================== */
+    @keyframes toastIn {
+      0% {
+        opacity: 0;
+        transform: translateX(100%) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+    @keyframes toastOut {
+      0% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(80%) scale(0.95);
+      }
+    }
+    .toast {
+      animation: toastIn 0.4s ease-out;
+    }
+    .toast.toast-hide {
+      animation: toastOut 0.3s ease-in forwards;
+    }
+
+    /* ===================================================================
+       RIPPLE EFFECT
+       =================================================================== */
+    .ripple-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(0);
+      animation: rippleAnim 0.5s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* ===================================================================
+       BOTÓN ELIMINAR SUTIL
+       =================================================================== */
+    .btn-delete {
+      opacity: 0.3;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .btn-delete:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    /* ===================================================================
+       UTILITARIOS
+       =================================================================== */
+    .text-balance {
+      text-wrap: balance;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================================================
+   TOAST CONTAINER — notificaciones flotantes
+   ================================================================ -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+  </div>
+
+  <!-- ================================================================
+   CONTENIDO PRINCIPAL
+   ================================================================ -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-8">
+
+    <!-- ===== HEADER ===== -->
+    <header class="anim-fade-up flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#C5A059]/10">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C5A059] to-[#8B6914] flex items-center justify-center text-[#0B0C10] font-bold text-lg shadow-lg shadow-[#C5A059]/20">
+          <i class="fas fa-cash-register"></i>
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight text-[#F3F4F6]">
+            Flujo de Caja
+          </h1>
+          <p class="text-xs text-[#9CA3AF] font-medium tracking-wide uppercase">
+            <i class="fas fa-utensils mr-1 text-[#C5A059]/70"></i>
+            Comida Paraguaya Premium
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-sm text-[#9CA3AF]">
+        <i class="fas fa-calendar-alt text-[#C5A059]/70"></i>
+        <span id="fecha-display" class="font-medium"></span>
+      </div>
+    </header>
+
+    <!-- ===== KPI CARDS ===== -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 anim-fade-up" style="animation-delay: 0.05s">
+      <!-- Ingresos -->
+      <div class="bg-[#1F2833] rounded-2xl p-4 sm:p-5 border border-[#2C3E50]/50 shadow-xl shadow-black/20 hover:border-[#10B981]/30 transition-all duration-300">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-9 h-9 rounded-lg bg-[#10B981]/10 flex items-center justify-center text-[#10B981]">
+            <i class="fas fa-arrow-down text-sm"></i>
+          </div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">Ingresos</span>
+        </div>
+        <p id="kpi-ingresos" class="text-xl sm:text-2xl font-bold text-[#10B981] transition-all duration-300">
+          Gs. 0
+        </p>
+      </div>
+
+      <!-- Egresos -->
+      <div class="bg-[#1F2833] rounded-2xl p-4 sm:p-5 border border-[#2C3E50]/50 shadow-xl shadow-black/20 hover:border-[#DC2626]/30 transition-all duration-300">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-9 h-9 rounded-lg bg-[#DC2626]/10 flex items-center justify-center text-[#DC2626]">
+            <i class="fas fa-arrow-up text-sm"></i>
+          </div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">Egresos</span>
+        </div>
+        <p id="kpi-egresos" class="text-xl sm:text-2xl font-bold text-[#DC2626] transition-all duration-300">
+          Gs. 0
+        </p>
+      </div>
+
+      <!-- Saldo Neto -->
+      <div class="bg-[#1F2833] rounded-2xl p-4 sm:p-5 border border-[#2C3E50]/50 shadow-xl shadow-black/20 hover:border-[#C5A059]/30 transition-all duration-300">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-9 h-9 rounded-lg bg-[#C5A059]/10 flex items-center justify-center text-[#C5A059]">
+            <i class="fas fa-coins text-sm"></i>
+          </div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-[#9CA3AF]">Saldo Neto</span>
+        </div>
+        <p id="kpi-saldo" class="text-xl sm:text-2xl font-bold text-[#C5A059] transition-all duration-300">
+          Gs. 0
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== REGISTRO RÁPIDO ===== -->
+    <section class="anim-fade-up" style="animation-delay: 0.1s">
+      <div class="flex items-center gap-2 mb-4">
+        <i class="fas fa-bolt text-[#C5A059] text-sm"></i>
+        <h2 class="text-base font-semibold text-[#F3F4F6] tracking-tight">
+          Registro Rápido
+        </h2>
+        <span class="text-[10px] text-[#9CA3AF] font-medium bg-[#1F2833] px-2 py-0.5 rounded-full border border-[#2C3E50]/50">
+          1 click
+        </span>
+      </div>
+
+      <div id="quick-buttons" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <!-- Los botones se generan desde JS -->
+      </div>
+    </section>
+
+    <!-- ===== FORMULARIO MANUAL ===== -->
+    <section class="anim-fade-up" style="animation-delay: 0.15s">
+      <div class="bg-[#1F2833] rounded-2xl p-5 sm:p-6 border border-[#2C3E50]/50 shadow-xl shadow-black/20">
+        <div class="flex items-center gap-2 mb-5">
+          <i class="fas fa-pen-alt text-[#C5A059] text-sm"></i>
+          <h2 class="text-base font-semibold text-[#F3F4F6] tracking-tight">
+            Registro Manual
+          </h2>
+        </div>
+
+        <form id="form-manual" class="space-y-4" autocomplete="off">
+          <!-- Concepto -->
+          <div>
+            <label for="input-concepto" class="block text-xs font-medium text-[#9CA3AF] mb-1.5 uppercase tracking-wider">
+              Concepto
+            </label>
+            <input
+            type="text"
+            id="input-concepto"
+            class="input-premium"
+            placeholder="Ej: Venta de Chipa, Compra de almidón..."
+            required
+            />
+          </div>
+
+          <!-- Monto + Tipo en fila -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="input-monto" class="block text-xs font-medium text-[#9CA3AF] mb-1.5 uppercase tracking-wider">
+                Monto (Gs.)
+              </label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[#C5A059] text-sm font-semibold pointer-events-none">
+                  ₲
+                </span>
+                <input
+                type="text"
+                id="input-monto"
+                class="input-premium pl-8"
+                placeholder="0"
+                inputmode="numeric"
+                autocomplete="off"
+                required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="input-tipo" class="block text-xs font-medium text-[#9CA3AF] mb-1.5 uppercase tracking-wider">
+                Tipo
+              </label>
+              <div class="relative">
+                <select id="input-tipo" class="input-premium select-premium">
+                  <option value="ingreso">🟢 Ingreso (Venta)</option>
+                  <option value="egreso">🔴 Egreso (Gasto)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button
+          type="submit"
+          class="ripple-btn w-full py-3 px-6 rounded-xl bg-gradient-to-r from-[#C5A059] to-[#A8842E] text-[#0B0C10] font-bold text-sm uppercase tracking-wider hover:from-[#D4B06A] hover:to-[#B8943E] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-lg shadow-[#C5A059]/20"
+          >
+          <i class="fas fa-check-circle mr-2"></i>
+          Registrar Movimiento
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== HISTORIAL ===== -->
+<section class="anim-fade-up" style="animation-delay: 0.2s">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <i class="fas fa-clock-rotate-left text-[#C5A059] text-sm"></i>
+      <h2 class="text-base font-semibold text-[#F3F4F6] tracking-tight">
+        Historial de Movimientos
+      </h2>
+      <span id="mov-count" class="text-[10px] text-[#9CA3AF] font-medium bg-[#1F2833] px-2 py-0.5 rounded-full border border-[#2C3E50]/50">
+        0
+      </span>
+    </div>
+    <button
+    id="btn-limpiar"
+    class="text-xs text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-200 flex items-center gap-1.5"
+    type="button"
+    title="Limpiar todo el historial"
+    >
+    <i class="fas fa-trash-can text-[10px]"></i>
+    Limpiar
+  </button>
+</div>
+
+<!-- Lista -->
+<div
+id="historial-lista"
+class="space-y-2 max-h-[420px] overflow-y-auto pr-1 no-scrollbar"
+>
+<!-- Los movimientos se generan desde JS -->
+<!-- Empty state (por defecto) -->
+<div id="empty-state" class="flex flex-col items-center justify-center py-12 text-center">
+  <div class="w-16 h-16 rounded-2xl bg-[#1F2833] border border-[#2C3E50]/50 flex items-center justify-center text-[#2C3E50] mb-4">
+    <i class="fas fa-receipt text-2xl"></i>
+  </div>
+  <p class="text-sm font-medium text-[#9CA3AF]">
+    Todavía no hay movimientos
+  </p>
+  <p class="text-xs text-[#6B7280] mt-1">
+    Usá los botones rápidos o el formulario manual para comenzar
+  </p>
+</div>
+</div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="anim-fade-up border-t border-[#C5A059]/10 pt-4 pb-8 text-center" style="animation-delay: 0.25s">
+  <p class="text-xs text-[#6B7280] flex items-center justify-center gap-2">
+    <i class="fas fa-sync-alt text-[10px] text-[#C5A059]/50"></i>
+    Los datos se guardan automáticamente en tu navegador
+    <span class="text-[#2C3E50]">·</span>
+    <span id="footer-total" class="text-[#9CA3AF]">0 movimientos hoy</span>
+  </p>
+</footer>
+
+</main>
+
+<!-- ================================================================
+JAVASCRIPT — Lógica completa de la aplicación
+=============================================================== -->
+<script>
+  // ===================================================================
+  // CONFIGURACIÓN
+  // ===================================================================
+  const STORAGE_KEY = 'cajaPremiumData';
+
+  /**
+   * Catálogo de productos rápidos.
+   * Cada producto tiene: id, nombre, precio (en Gs.), emoji, clase CSS para animación.
+   */
+  const PRODUCTOS = [{
+    id: 'mbeju',
+    nombre: 'Mbeju',
+    precio: 15000,
+    emoji: '🫓',
+    animClass: 'btn-mbeju',
+    desc: 'Almidón de mandioca'
+  }, {
+    id: 'chipa',
+    nombre: 'Chipa',
+    precio: 10000,
+    emoji: '🥟',
+    animClass: 'btn-chipa',
+    desc: 'Pan de queso'
+  }, {
+    id: 'pajagua',
+    nombre: 'Pajagua Mascada',
+    precio: 25000,
+    emoji: '🌮',
+    animClass: 'btn-pajagua',
+    desc: 'Torta frita rellena'
+  }, {
+    id: 'pastel',
+    nombre: "Pastel Mandi'o",
+    precio: 8000,
+    emoji: '🥟',
+    animClass: 'btn-pastel',
+    desc: 'Pastel frito de mandioca'
+  }, {
+    id: 'chicharo',
+    nombre: 'Chicharõ Trenzado',
+    precio: 20000,
+    emoji: '🥓',
+    animClass: 'btn-chicharo',
+    desc: 'Chicharrón trenzado'
+  }, {
+    id: 'sopa',
+    nombre: 'Sopa Paraguaya',
+    precio: 12000,
+    emoji: '🥘',
+    animClass: 'btn-sopa',
+    desc: 'Pastel de maíz y queso'
+  }];
+
+  // ===================================================================
+  // ESTADO GLOBAL
+  // ===================================================================
+  let movimientos = [];
+
+  // ===================================================================
+  // DOM REFS
+  // ===================================================================
+  const $ = (id) => document.getElementById(id);
+  const $$ = (sel, ctx) => (ctx || document).querySelectorAll(sel);
+
+  const DOM = {
+    fecha: $('fecha-display'),
+    kpiIngresos: $('kpi-ingresos'),
+    kpiEgresos: $('kpi-egresos'),
+    kpiSaldo: $('kpi-saldo'),
+    quickBtns: $('quick-buttons'),
+    form: $('form-manual'),
+    inputConcepto: $('input-concepto'),
+    inputMonto: $('input-monto'),
+    inputTipo: $('input-tipo'),
+    historialLista: $('historial-lista'),
+    emptyState: $('empty-state'),
+    movCount: $('mov-count'),
+    btnLimpiar: $('btn-limpiar'),
+    footerTotal: $('footer-total'),
+    toastContainer: $('toast-container'),
+  };
+
+  // ===================================================================
+  // UTILIDADES
+  // ===================================================================
+
+  /** Formatea un número con separador de miles (estilo paraguayo: 15.000) */
+  function formatNum(n) {
+    return new Intl.NumberFormat('es-PY').format(n);
+  }
+
+  /** Formatea monto en Guaraníes */
+  function formatGs(n) {
+    return 'Gs. ' + formatNum(n);
+  }
+
+  /** Formatea el input de monto en vivo: 70000 → 70.000 mientras el usuario escribe */
+  function formatearMontoInput() {
+    const input = DOM.inputMonto;
+    // Guardar posición del cursor
+    const cursorPos = input.selectionStart;
+    const lenBefore = input.value.length;
+
+    // Quitar todo excepto dígitos
+    let soloNumeros = input.value.replace(/\D/g, '');
+
+    // Si está vacío, dejar vacío
+    if (!soloNumeros) {
+      input.value = '';
+      return;
+    }
+
+    // Convertir a número y formatear con separador de miles
+    const numero = parseInt(soloNumeros, 10);
+    input.value = formatNum(numero);
+
+    // Ajustar cursor al final
+    const lenAfter = input.value.length;
+    const diff = lenAfter - lenBefore;
+    input.setSelectionRange(cursorPos + diff, cursorPos + diff);
+  }
+
+  /** Genera ID único por timestamp */
+  function genId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  /** Obtiene la fecha actual formateada en español paraguayo */
+  function getFechaDisplay() {
+    const ahora = new Date();
+    const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return ahora.toLocaleDateString('es-PY', opts);
+  }
+
+  /** Extrae solo la hora de un ISO string */
+  function formatHora(iso) {
+    const d = new Date(iso);
+    return d.toLocaleTimeString('es-PY', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  /** Extrae solo la fecha de un ISO string */
+  function formatFecha(iso) {
+    const d = new Date(iso);
+    const hoy = new Date();
+    const esHoy = d.toDateString() === hoy.toDateString();
+    if (esHoy) return 'Hoy';
+    const ayer = new Date(hoy);
+    ayer.setDate(ayer.getDate() - 1);
+    if (d.toDateString() === ayer.toDateString()) return 'Ayer';
+    return d.toLocaleDateString('es-PY', { day: 'numeric', month: 'short' });
+  }
+
+  // ===================================================================
+  // PERSISTENCIA (localStorage)
+  // ===================================================================
+
+  function guardar() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(movimientos));
+    } catch (e) {
+      console.warn('Error al guardar en localStorage:', e);
+    }
+  }
+
+  function cargar() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        movimientos = JSON.parse(raw);
+        // Validar estructura básica
+        if (!Array.isArray(movimientos)) movimientos = [];
+      }
+    } catch (e) {
+      console.warn('Error al cargar datos:', e);
+      movimientos = [];
+    }
+  }
+
+  // ===================================================================
+  // CRUD
+  // ===================================================================
+
+  function agregarMovimiento(concepto, monto, tipo) {
+    const mov = {
+      id: genId(),
+      concepto: concepto.trim(),
+      monto: Math.round(Math.abs(monto)),
+      tipo: tipo, // 'ingreso' | 'egreso'
+      timestamp: new Date().toISOString(),
+    };
+    movimientos.unshift(mov);
+    guardar();
+    render();
+    return mov;
+  }
+
+  function eliminarMovimiento(id) {
+    const idx = movimientos.findIndex(m => m.id === id);
+    if (idx === -1) return false;
+    movimientos.splice(idx, 1);
+    guardar();
+    render();
+    return true;
+  }
+
+  function limpiarTodo() {
+    if (movimientos.length === 0) return;
+    movimientos = [];
+    guardar();
+    render();
+    mostrarToast('Historial limpiado', 'info');
+  }
+
+  // ===================================================================
+  // TOAST SYSTEM
+  // ===================================================================
+
+  function mostrarToast(mensaje, tipo) {
+    const colores = {
+      success: { bg: 'bg-[#10B981]/90', icon: 'fa-check-circle', border: 'border-[#10B981]/30' },
+      error: { bg: 'bg-[#DC2626]/90', icon: 'fa-circle-xmark', border: 'border-[#DC2626]/30' },
+      info: { bg: 'bg-[#C5A059]/90', icon: 'fa-circle-info', border: 'border-[#C5A059]/30' },
+    };
+    const cfg = colores[tipo] || colores.info;
+
+    const el = document.createElement('div');
+    el.className =
+      `toast pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl ${cfg.bg} border ${cfg.border} shadow-2xl backdrop-blur-md text-white text-sm font-medium`;
+    el.innerHTML = `
+        <i class="fas ${cfg.icon} text-sm shrink-0"></i>
+        <span class="flex-1">${mensaje}</span>
+        <button class="text-white/60 hover:text-white transition-colors" onclick="this.parentElement.classList.add('toast-hide');setTimeout(()=>this.parentElement.remove(),300)">
+          <i class="fas fa-xmark text-xs"></i>
+        </button>
+      `;
+    DOM.toastContainer.prepend(el);
+
+    // Auto-dismiss
+    setTimeout(() => {
+      if (el.isConnected) {
+        el.classList.add('toast-hide');
+        setTimeout(() => el.remove(), 300);
+      }
+    }, 3000);
+  }
+
+  // ===================================================================
+  // RIPPLE EFFECT
+  // ===================================================================
+
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.ripple-btn');
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple-effect';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    btn.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  });
+
+  // ===================================================================
+  // RENDERIZADO
+  // ===================================================================
+
+  /** Renderiza todo: KPIs, historial, footer */
+  function render() {
+    renderKPI();
+    renderHistorial();
+    renderFooter();
+  }
+
+  /** Renderiza las 3 tarjetas KPI con animación de conteo */
+  function renderKPI() {
+    const totalIngresos = movimientos
+      .filter(m => m.tipo === 'ingreso')
+      .reduce((sum, m) => sum + m.monto, 0);
+    const totalEgresos = movimientos
+      .filter(m => m.tipo === 'egreso')
+      .reduce((sum, m) => sum + m.monto, 0);
+    const saldo = totalIngresos - totalEgresos;
+
+    // Actualizar con animación pop
+    const actualizarKPI = (el, valor, color) => {
+      const texto = formatGs(valor);
+      if (el.textContent !== texto) {
+        el.textContent = texto;
+        el.style.color = color;
+        el.classList.remove('kpi-pop');
+        // Forzar reflow para reiniciar animación
+        void el.offsetWidth;
+        el.classList.add('kpi-pop');
+      }
+    };
+
+    actualizarKPI(DOM.kpiIngresos, totalIngresos, '#10B981');
+    actualizarKPI(DOM.kpiEgresos, totalEgresos, '#DC2626');
+    actualizarKPI(DOM.kpiSaldo, saldo, saldo >= 0 ? '#C5A059' : '#DC2626');
+  }
+
+  /** Renderiza la lista del historial */
+  function renderHistorial() {
+    const container = DOM.historialLista;
+    const empty = DOM.emptyState;
+
+    if (movimientos.length === 0) {
+      // Mostrar solo empty state
+      container.innerHTML = '';
+      container.appendChild(empty);
+      empty.style.display = 'flex';
+      DOM.movCount.textContent = '0';
+      return;
+    }
+
+    // Ocultar empty state si está visible
+    empty.style.display = 'none';
+
+    // Construir HTML
+    let html = '';
+    movimientos.forEach((m, idx) => {
+      const esIngreso = m.tipo === 'ingreso';
+      const signo = esIngreso ? '+' : '−';
+      const color = esIngreso ? 'text-[#10B981]' : 'text-[#DC2626]';
+      const bgDot = esIngreso ? 'bg-[#10B981]' : 'bg-[#DC2626]';
+      const bgRow = idx === 0 ? 'historial-item-new' : '';
+
+      html += `
+          <div class="${bgRow} flex items-center gap-3 bg-[#1F2833]/80 hover:bg-[#1F2833] rounded-xl px-4 py-3 border border-[#2C3E50]/30 transition-all duration-200 group">
+            <!-- Indicador -->
+            <div class="w-2 h-2 rounded-full ${bgDot} shrink-0 shadow-sm ${esIngreso ? 'shadow-[#10B981]/30' : 'shadow-[#DC2626]/30'}"></div>
+
+            <!-- Hora -->
+            <span class="text-[11px] text-[#6B7280] font-medium w-10 shrink-0">${formatHora(m.timestamp)}</span>
+
+            <!-- Concepto -->
+            <span class="flex-1 text-sm font-medium text-[#F3F4F6] truncate">${m.concepto}</span>
+
+            <!-- Fecha (si no es hoy) -->
+            <span class="text-[10px] text-[#6B7280] hidden sm:block w-10 text-right">${formatFecha(m.timestamp)}</span>
+
+            <!-- Monto -->
+            <span class="text-sm font-bold ${color} tabular-nums w-28 text-right">${signo} ${formatNum(m.monto)}</span>
+
+            <!-- Eliminar -->
+            <button
+              class="btn-delete text-[#9CA3AF] hover:text-[#DC2626] transition-all"
+              data-id="${m.id}"
+              title="Eliminar movimiento"
+              type="button"
+            >
+              <i class="fas fa-trash-can text-xs"></i>
+            </button>
+          </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    DOM.movCount.textContent = movimientos.length.toString();
+
+    // Delegación de eventos para eliminar
+    container.querySelectorAll('.btn-delete').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const id = this.dataset.id;
+        if (id) {
+          const mov = movimientos.find(m => m.id === id);
+          eliminarMovimiento(id);
+          mostrarToast(
+            `“${mov ? mov.concepto : 'Movimiento'}” eliminado`,
+            'error'
+          );
+        }
+      });
+    });
+  }
+
+  /** Renderiza el footer con total de movimientos */
+  function renderFooter() {
+    const count = movimientos.length;
+    DOM.footerTotal.textContent = count === 0 ?
+      '0 movimientos hoy' :
+      `${count} movimiento${count !== 1 ? 's' : ''} hoy`;
+  }
+
+  /** Renderiza los botones de registro rápido */
+  function renderQuickButtons() {
+    let html = '';
+    PRODUCTOS.forEach((p) => {
+      // Para Sopa Paraguaya, agregar wisps de vapor
+      const steam = p.id === 'sopa' ? `
+          <span class="steam-wisp">♨️</span>
+          <span class="steam-wisp">♨️</span>
+          <span class="steam-wisp">♨️</span>
+        ` : '';
+
+      // Para Pajagua Mascada, agregar shimmer overlay
+      const shimmer = p.id === 'pajagua' ? `<span class="shimmer"></span>` : '';
+
+      html += `
+          <button
+            type="button"
+            class="ripple-btn ${p.animClass} relative flex flex-col items-center justify-center gap-1.5 p-4 rounded-2xl bg-[#1F2833] border border-[#C5A059]/10 hover:border-[#C5A059]/40 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-[#C5A059]/5 transition-all duration-300 group"
+            data-producto='${JSON.stringify(p)}'
+          >
+            ${steam}
+            ${shimmer}
+            <span class="text-2xl sm:text-3xl leading-none transition-transform duration-300 group-hover:scale-110">${p.emoji}</span>
+            <span class="text-sm font-semibold text-[#F3F4F6] leading-tight text-center">${p.nombre}</span>
+            <span class="text-[11px] font-bold text-[#C5A059]">${formatGs(p.precio)}</span>
+          </button>
+        `;
+    });
+    DOM.quickBtns.innerHTML = html;
+
+    // Event listeners para los botones rápidos
+    DOM.quickBtns.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        try {
+          const prod = JSON.parse(this.dataset.producto);
+          const mov = agregarMovimiento(prod.nombre, prod.precio, 'ingreso');
+          mostrarToast(`✅ ${prod.nombre} · ${formatGs(prod.precio)}`, 'success');
+        } catch (e) {
+          console.warn('Error al registrar producto rápido:', e);
+        }
+      });
+    });
+  }
+
+  // ===================================================================
+  // EVENT LISTENERS
+  // ===================================================================
+
+  function initEventListeners() {
+    // Formulario manual
+    DOM.form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const concepto = DOM.inputConcepto.value.trim();
+      // Quitar separadores de miles (puntos) del monto
+      const montoRaw = DOM.inputMonto.value.replace(/\./g, '').trim();
+      const tipo = DOM.inputTipo.value;
+
+      // Validaciones
+      if (!concepto) {
+        mostrarToast('Ingresá un concepto', 'info');
+        DOM.inputConcepto.focus();
+        return;
+      }
+      if (!montoRaw || isNaN(montoRaw) || Number(montoRaw) <= 0) {
+        mostrarToast('Ingresá un monto válido en Gs.', 'info');
+        DOM.inputMonto.focus();
+        return;
+      }
+
+      const mov = agregarMovimiento(concepto, Number(montoRaw), tipo);
+
+      const label = tipo === 'ingreso' ? 'Ingreso' : 'Egreso';
+      mostrarToast(`${label} · ${formatGs(mov.monto)} — ${mov.concepto}`, tipo === 'ingreso' ? 'success' : 'error');
+
+      // Reset formulario
+      DOM.form.reset();
+      DOM.inputConcepto.focus();
+    });
+
+    // Formateo en vivo del campo monto (70000 → 70.000)
+    DOM.inputMonto.addEventListener('input', formatearMontoInput);
+
+    // Botón limpiar todo
+    DOM.btnLimpiar.addEventListener('click', function() {
+      if (movimientos.length === 0) {
+        mostrarToast('El historial ya está vacío', 'info');
+        return;
+      }
+      if (confirm('¿Limpiar todo el historial? Esta acción no se puede deshacer.')) {
+        limpiarTodo();
+      }
+    });
+
+    // Atajo de teclado: Escape para limpiar inputs
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.activeElement?.closest('.input-premium')) {
+        document.activeElement.blur();
+      }
+    });
+  }
+
+  // ===================================================================
+  // INICIALIZACIÓN
+  // ===================================================================
+
+  function init() {
+    // Cargar datos
+    cargar();
+
+    // Mostrar fecha
+    DOM.fecha.textContent = getFechaDisplay();
+
+    // Renderizar botones rápidos (solo una vez)
+    renderQuickButtons();
+
+    // Renderizar todo
+    render();
+
+    // Inicializar eventos
+    initEventListeners();
+
+    // Actualizar fecha cada minuto (por si pasa la medianoche)
+    setInterval(() => {
+      DOM.fecha.textContent = getFechaDisplay();
+    }, 60000);
+
+    console.log(`✅ Flujo de Caja iniciado — ${movimientos.length} movimientos cargados`);
+  }
+
+  // Arrancar
+  document.addEventListener('DOMContentLoaded', init);
+
+  // ===================================================================
+  // SERVICE WORKER — registro para PWA
+  // ===================================================================
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        console.log('✅ Service Worker registrado:', reg.scope);
+      }).catch((err) => {
+        console.warn('⚠️ Service Worker no se pudo registrar:', err);
+      });
+    });
+  }
+</script>
+
+<!-- Banner informativo si se abre desde archivo local (file://) -->
+<script>
+  if (window.location.protocol === 'file:') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const banner = document.createElement('div');
+      banner.className = 'fixed bottom-0 left-0 right-0 z-40 bg-[#C5A059]/10 backdrop-blur-md border-t border-[#C5A059]/20';
+      banner.innerHTML = `
+        <div class="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+          <p class="text-xs text-[#9CA3AF] flex items-center gap-2">
+            <i class="fas fa-info-circle text-[#C5A059]"></i>
+            Para instalar como app, serví los archivos con un servidor local
+          </p>
+          <button onclick="this.parentElement.parentElement.remove()" class="text-[#9CA3AF] hover:text-[#F3F4F6] transition-colors text-xs">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+      `;
+      document.body.appendChild(banner);
+    });
+  }
+</script>
+
+</body>
+</html>

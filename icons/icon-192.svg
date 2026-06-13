@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="192" y2="192">
+      <stop offset="0%" stop-color="#1F2833"/>
+      <stop offset="100%" stop-color="#0B0C10"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="36" fill="url(#bg)"/>
+  <g transform="translate(96,96)">
+    <!-- Caja registradora - body -->
+    <rect x="-48" y="-12" width="96" height="56" rx="8" fill="#C5A059"/>
+    <!-- Pantalla -->
+    <rect x="-36" y="-24" width="72" height="14" rx="4" fill="#F3F4F6" opacity="0.9"/>
+    <text x="-28" y="-14" font-family="monospace" font-size="8" font-weight="bold" fill="#1F2833">Gs. 0</text>
+    <!-- Teclas -->
+    <circle cx="-28" cy="8" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="-12" cy="8" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="4" cy="8" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="20" cy="8" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="-28" cy="24" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="-12" cy="24" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="4" cy="24" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <circle cx="20" cy="24" r="5" fill="#F3F4F6" opacity="0.7"/>
+    <!-- Ranura monedas -->
+    <rect x="30" y="0" width="14" height="30" rx="3" fill="#8B6914"/>
+    <rect x="34" y="4" width="6" height="22" rx="1" fill="#C5A059" opacity="0.5"/>
+    <!-- Moneda cayendo -->
+    <circle cx="24" cy="-8" r="4" fill="#F3F4F6" opacity="0.9"/>
+  </g>
+</svg>
