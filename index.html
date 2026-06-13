@@ -461,13 +461,6 @@
     .text-balance {
       text-wrap: balance;
     }
-    @keyframes bounce-subtle {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .animate-bounce-subtle {
-      animation: bounce-subtle 2s ease-in-out infinite;
-    }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -699,11 +692,11 @@ class="space-y-2 max-h-[420px] overflow-y-auto pr-1 no-scrollbar"
   </p>
 </footer>
 
-<!-- ===== INSTALL BUTTON (oculto por defecto) ===== -->
-<div id="install-container" class="hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-40">
-  <button id="btn-install" class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#C5A059] text-[#0B0C10] font-semibold text-sm shadow-2xl shadow-[#C5A059]/30 hover:bg-[#D4B06A] transition-all duration-300 animate-bounce-subtle">
+<!-- ===== INSTALL BUTTON (siempre visible en la esquina) ===== -->
+<div class="fixed bottom-6 right-4 z-40">
+  <button id="btn-install" class="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#C5A059] text-[#0B0C10] font-semibold text-sm shadow-2xl shadow-[#C5A059]/30 hover:bg-[#D4B06A] transition-all duration-300" title="Instalar app en tu dispositivo">
     <i class="fas fa-download"></i>
-    Instalar App
+    <span class="hidden sm:inline">Instalar App</span>
   </button>
 </div>
 
@@ -1248,32 +1241,33 @@ JAVASCRIPT — Lógica completa de la aplicación
     });
   }
 
-  // PWA — beforeinstallprompt
+  // PWA — botón de instalar siempre visible
   let deferredPrompt = null;
-  const installContainer = document.getElementById('install-container');
   const installBtn = document.getElementById('btn-install');
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installContainer.classList.remove('hidden');
   });
 
   if (installBtn) {
     installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice;
-      if (result.outcome === 'accepted') {
-        installContainer.classList.add('hidden');
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (result.outcome === 'accepted') {
+          mostrarToast('✅ App instalada correctamente', 'success');
+        }
+      } else {
+        mostrarToast('📱 Abrí el menú ⋮ y tocá "Agregar a pantalla de inicio"', 'info');
       }
-      deferredPrompt = null;
     });
   }
 
   window.addEventListener('appinstalled', () => {
-    installContainer.classList.add('hidden');
     deferredPrompt = null;
+    mostrarToast('✅ App instalada correctamente', 'success');
   });
 </script>
 
